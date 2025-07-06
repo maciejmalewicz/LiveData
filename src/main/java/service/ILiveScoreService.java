@@ -9,6 +9,6 @@ public interface ILiveScoreService {
 
     Game startGame(String homeTeamName, String awayTeamName);
     boolean finishGame(Game game);
-    Game updateScore(Game game, Score score);
+    boolean updateScore(Game game, Score score);
     List<Game> getSummaryByTotalScore(Score totalScore);
 }

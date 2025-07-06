@@ -35,7 +35,7 @@ public class LiveScoreService implements ILiveScoreService {
     }
 
     @Override
-    public Game updateScore(Game game, Score score) {
+    public boolean updateScore(Game game, Score score) {
         throw new RuntimeException("Not implemented");
     }
 

@@ -70,6 +70,38 @@ class LiveScoreServiceTest {
         assertFalse(result);
     }
 
+    @Test
+    void testUpdateGame_NormalScenario() {
+        var sampleGames = generateSampleGames();
+        service = new LiveScoreService(sampleGames);
+        var brazilArgentinaGame = sampleGames.get(0);
+        var allOtherGames = sampleGames.stream().filter(g -> !g.equals(brazilArgentinaGame)).toList();
+        var newScore = new Score(3, 1);
+        var result = service.updateScore(brazilArgentinaGame, newScore);
+        assertEquals(sampleGames.size(), service.getAllGames().size());
+        assertHavingGameWithScore(brazilArgentinaGame.getHomeTeam(), brazilArgentinaGame.getAwayTeam(), newScore);
+        allOtherGames.forEach(game -> assertHavingGameWithScore(game.getHomeTeam(), game.getAwayTeam(), game.getScore()));
+        assertTrue(result);
+    }
+
+    @Test
+    void testUpdateGame_NonExistingGame() {
+        var sampleGames = generateSampleGames();
+        service = new LiveScoreService(sampleGames);
+        var toBeUpdated = new Game("USA", "Portugal");
+        var newScore = new Score(3, 1);
+        var result = service.updateScore(toBeUpdated, newScore);
+        assertEquals(sampleGames.size(), service.getAllGames().size());
+        sampleGames.forEach(game -> assertHavingGameWithScore(game.getHomeTeam(), game.getAwayTeam(), game.getScore()));
+        assertFalse(result);
+    }
+
+    void assertHavingGameWithScore(String homeTeam, String awayTeam, Score score) {
+        assertEquals(1, service.getAllGames().stream()
+                .filter(g -> g.getHomeTeam().equals(homeTeam) && g.getAwayTeam().equals(awayTeam) && g.getScore().equals(score))
+                .count());
+    }
+
     void assertGameSaved(Game game) {
         var numOfGames = service.getAllGames().stream()
                 .filter(game::equals)
