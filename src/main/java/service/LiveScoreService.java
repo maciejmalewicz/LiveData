@@ -3,19 +3,26 @@ package service;
 import model.Game;
 import model.Score;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LiveScoreService implements ILiveScoreService {
 
+    private final List<Game> games;
+
     public LiveScoreService() {
+        games = new ArrayList<>();
     }
 
     public LiveScoreService(List<Game> existingGames) {
+        games = new ArrayList<>(existingGames);
     }
 
     @Override
     public Game startGame(String homeTeamName, String awayTeamName) {
-        throw new RuntimeException("Not implemented");
+        var game = new Game(homeTeamName, awayTeamName);
+        games.add(game);
+        return game;
     }
 
     @Override
@@ -34,6 +41,6 @@ public class LiveScoreService implements ILiveScoreService {
     }
 
     List<Game> getAllGames() {
-        throw new RuntimeException("Not implemented");
+        return games;
     }
 }

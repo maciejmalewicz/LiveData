@@ -1,20 +1,21 @@
 package model;
 
-import java.util.Date;
 import java.util.Objects;
 
 public class Game {
 
+    private static long CURRENT_ID;
+
+    private final long id;
     private final String homeTeam;
     private final String awayTeam;
-    private final Date createTime;
     private Score score;
 
 
     public Game(String homeTeam, String awayTeam) {
+        this.id = ++CURRENT_ID;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
-        this.createTime = new Date();
         this.score = new Score(0, 0);
     }
 
@@ -26,8 +27,8 @@ public class Game {
         return awayTeam;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public long getId() {
+        return id;
     }
 
     public Score getScore() {
@@ -43,11 +44,11 @@ public class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        return homeTeam.equals(game.homeTeam) && awayTeam.equals(game.awayTeam) && createTime.equals(game.createTime) && score.equals(game.score);
+        return id == game.id && homeTeam.equals(game.homeTeam) && awayTeam.equals(game.awayTeam) && score.equals(game.score);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(homeTeam, awayTeam, createTime, score);
+        return Objects.hash(id, homeTeam, awayTeam, score);
     }
 }
