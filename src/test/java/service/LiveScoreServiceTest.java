@@ -106,7 +106,7 @@ class LiveScoreServiceTest {
         assertEquals(expectedResult.size(), gamesOrdered.size());
         IntStream.range(0, expectedResult.size()).forEach(i -> {
             var expectedGame = expectedResult.get(i);
-            var actualGame = expectedResult.get(i);
+            var actualGame = gamesOrdered.get(i);
             assertEquals(expectedGame.getHomeTeam(), actualGame.getHomeTeam());
             assertEquals(expectedGame.getAwayTeam(), actualGame.getAwayTeam());
             assertEquals(expectedGame.getScore(), actualGame.getScore());

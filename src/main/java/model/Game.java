@@ -39,6 +39,10 @@ public class Game {
         score = newScore;
     }
 
+    public int getTotalScore() {
+        return score.homeTeamScore() + score.awayTeamScore();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

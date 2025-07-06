@@ -45,7 +45,12 @@ public class LiveScoreService implements ILiveScoreService {
 
     @Override
     public List<Game> getSummaryByTotalScore() {
-        throw new RuntimeException("Not implemented");
+        return getAllGames().stream().sorted((g1, g2) -> {
+            if (g1.getTotalScore() != g2.getTotalScore()) {
+                return g2.getTotalScore() - g1.getTotalScore();
+            }
+            return g1.getId() < g2.getId() ? -1 : 1;
+        }).toList();
     }
 
     List<Game> getAllGames() {
