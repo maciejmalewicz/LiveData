@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -96,6 +97,23 @@ class LiveScoreServiceTest {
         assertFalse(result);
     }
 
+    @Test
+    void testGetSummaryByTotalScore() {
+        var sampleGames = generateSampleGames();
+        service = new LiveScoreService(sampleGames);
+        var gamesOrdered = service.getSummaryByTotalScore();
+        var expectedResult = generateOrderedSampleGames();
+        assertEquals(expectedResult.size(), gamesOrdered.size());
+        IntStream.range(0, expectedResult.size()).forEach(i -> {
+            var expectedGame = expectedResult.get(i);
+            var actualGame = expectedResult.get(i);
+            assertEquals(expectedGame.getHomeTeam(), actualGame.getHomeTeam());
+            assertEquals(expectedGame.getAwayTeam(), actualGame.getAwayTeam());
+            assertEquals(expectedGame.getScore(), actualGame.getScore());
+        });
+    }
+
+
     void assertHavingGameWithScore(String homeTeam, String awayTeam, Score score) {
         assertEquals(1, service.getAllGames().stream()
                 .filter(g -> g.getHomeTeam().equals(homeTeam) && g.getAwayTeam().equals(awayTeam) && g.getScore().equals(score))
@@ -124,26 +142,57 @@ class LiveScoreServiceTest {
 
     List<Game> generateSampleGames() {
         return Arrays.asList(
-                createGameWithScore("Brazil", "Argentina", new Score(2, 1)), // repeated score A
-                createGameWithScore("France", "Germany", new Score(1, 2)),   // repeated score B
-                createGameWithScore("Spain", "Portugal", new Score(2, 1)),   // repeated score A
-                createGameWithScore("Italy", "England", new Score(0, 0)),    // repeated score C
-                createGameWithScore("Netherlands", "Belgium", new Score(3, 2)), // repeated score D
-                createGameWithScore("Sweden", "Norway", new Score(1, 1)),    // repeated score E
-                createGameWithScore("Denmark", "Finland", new Score(2, 1)),  // repeated score A
-                createGameWithScore("Poland", "Czech Republic", new Score(1, 2)), // repeated score B
-                createGameWithScore("Austria", "Switzerland", new Score(2, 1)), // repeated score A
-                createGameWithScore("Croatia", "Serbia", new Score(0, 0)),   // repeated score C
+                createGameWithScore("Brazil", "Argentina", new Score(2, 1)),
+                createGameWithScore("France", "Germany", new Score(1, 2)),
+                createGameWithScore("Spain", "Portugal", new Score(2, 1)),
+                createGameWithScore("Italy", "England", new Score(0, 0)),
+                createGameWithScore("Netherlands", "Belgium", new Score(3, 2)),
+                createGameWithScore("Sweden", "Norway", new Score(1, 1)),
+                createGameWithScore("Denmark", "Finland", new Score(2, 1)),
+                createGameWithScore("Poland", "Czech Republic", new Score(1, 2)),
+                createGameWithScore("Austria", "Switzerland", new Score(2, 1)),
+                createGameWithScore("Croatia", "Serbia", new Score(0, 0)),
                 createGameWithScore("USA", "Mexico", new Score(1, 0)),
                 createGameWithScore("Canada", "Costa Rica", new Score(2, 2)),
-                createGameWithScore("Japan", "South Korea", new Score(3, 2)), // repeated score D
-                createGameWithScore("Australia", "New Zealand", new Score(1, 1)), // repeated score E
-                createGameWithScore("Turkey", "Greece", new Score(2, 1)),     // repeated score A
-                createGameWithScore("Russia", "Ukraine", new Score(1, 2)),    // repeated score B
+                createGameWithScore("Japan", "South Korea", new Score(3, 2)),
+                createGameWithScore("Australia", "New Zealand", new Score(1, 1)),
+                createGameWithScore("Turkey", "Greece", new Score(2, 1)),
+                createGameWithScore("Russia", "Ukraine", new Score(1, 2)),
                 createGameWithScore("China", "Iran", new Score(1, 0)),
-                createGameWithScore("Egypt", "Morocco", new Score(2, 1)),     // repeated score A
-                createGameWithScore("Nigeria", "Ghana", new Score(0, 0)),     // repeated score C
-                createGameWithScore("Colombia", "Chile", new Score(2, 1))     // repeated score A
+                createGameWithScore("Egypt", "Morocco", new Score(2, 1)),
+                createGameWithScore("Nigeria", "Ghana", new Score(0, 0)),
+                createGameWithScore("Colombia", "Chile", new Score(2, 1))
+        );
+    }
+
+    List<Game> generateOrderedSampleGames() {
+        return Arrays.asList(
+                // total score 5
+                createGameWithScore("Netherlands", "Belgium", new Score(3, 2)),
+                createGameWithScore("Japan", "South Korea", new Score(3, 2)),
+                // total score 4
+                createGameWithScore("Canada", "Costa Rica", new Score(2, 2)),
+                // total score 3
+                createGameWithScore("Brazil", "Argentina", new Score(2, 1)),
+                createGameWithScore("France", "Germany", new Score(1, 2)),
+                createGameWithScore("Spain", "Portugal", new Score(2, 1)),
+                createGameWithScore("Denmark", "Finland", new Score(2, 1)),
+                createGameWithScore("Poland", "Czech Republic", new Score(1, 2)),
+                createGameWithScore("Austria", "Switzerland", new Score(2, 1)),
+                createGameWithScore("Turkey", "Greece", new Score(2, 1)),
+                createGameWithScore("Russia", "Ukraine", new Score(1, 2)),
+                createGameWithScore("Egypt", "Morocco", new Score(2, 1)),
+                createGameWithScore("Colombia", "Chile", new Score(2, 1)),
+                // total score 2
+                createGameWithScore("Sweden", "Norway", new Score(1, 1)),
+                createGameWithScore("Australia", "New Zealand", new Score(1, 1)),
+                // total sore 1
+                createGameWithScore("USA", "Mexico", new Score(1, 0)),
+                createGameWithScore("China", "Iran", new Score(1, 0)),
+                // total score 0
+                createGameWithScore("Italy", "England", new Score(0, 0)),
+                createGameWithScore("Croatia", "Serbia", new Score(0, 0)),
+                createGameWithScore("Nigeria", "Ghana", new Score(0, 0))
         );
     }
 

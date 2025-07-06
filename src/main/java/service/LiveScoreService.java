@@ -44,7 +44,7 @@ public class LiveScoreService implements ILiveScoreService {
     }
 
     @Override
-    public List<Game> getSummaryByTotalScore(Score totalScore) {
+    public List<Game> getSummaryByTotalScore() {
         throw new RuntimeException("Not implemented");
     }
 
