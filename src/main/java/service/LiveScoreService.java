@@ -36,7 +36,11 @@ public class LiveScoreService implements ILiveScoreService {
 
     @Override
     public boolean updateScore(Game game, Score score) {
-        throw new RuntimeException("Not implemented");
+        var toBeUpdated = games.stream()
+                .filter(g -> g == game)
+                .findFirst();
+        toBeUpdated.ifPresent(g -> g.setScore(score));
+        return toBeUpdated.isPresent();
     }
 
     @Override
