@@ -27,7 +27,11 @@ public class LiveScoreService implements ILiveScoreService {
 
     @Override
     public boolean finishGame(Game game) {
-        throw new RuntimeException("Not implemented");
+        var toBeRemoved = games.stream()
+                .filter(g -> g == game)
+                .findFirst();
+        toBeRemoved.ifPresent(games::remove);
+        return toBeRemoved.isPresent();
     }
 
     @Override
