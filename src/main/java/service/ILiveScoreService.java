@@ -8,7 +8,7 @@ import java.util.List;
 public interface ILiveScoreService {
 
     Game startGame(String homeTeamName, String awayTeamName);
-    void finishGame(Game game);
+    boolean finishGame(Game game);
     Game updateScore(Game game, Score score);
     List<Game> getSummaryByTotalScore(Score totalScore);
 }

@@ -5,7 +5,6 @@ import model.Score;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,11 +48,40 @@ class LiveScoreServiceTest {
         assertGame(game2, "Poland", "Germany", new Score(0, 0));
     }
 
+    @Test
+    void testFinishGame_NormalScenario() {
+        var sampleGames = generateSampleGames();
+        service = new LiveScoreService(sampleGames);
+        var brazilArgentinaGame = sampleGames.get(0);
+        var result = service.finishGame(brazilArgentinaGame);
+        assertEquals(sampleGames.size() - 1, service.getAllGames().size());
+        assertGameNotSaved(brazilArgentinaGame);
+        assertTrue(result);
+    }
+
+    @Test
+    void testFinishGame_GameNotExisting() {
+        var sampleGames = generateSampleGames();
+        service = new LiveScoreService(sampleGames);
+
+        var gameToRemove = new Game("USA", "China");
+        var result = service.finishGame(gameToRemove);
+        assertEquals(sampleGames.size(), service.getAllGames().size());
+        assertFalse(result);
+    }
+
     void assertGameSaved(Game game) {
         var numOfGames = service.getAllGames().stream()
                 .filter(game::equals)
                 .count();
         assertEquals(1, numOfGames);
+    }
+
+    void assertGameNotSaved(Game game) {
+        var numOfGames = service.getAllGames().stream()
+                .filter(game::equals)
+                .count();
+        assertEquals(0, numOfGames);
     }
 
     void assertGame(Game game, String homeTeamName, String awayTeamName, Score score) {
